@@ -14,7 +14,7 @@ import java.util.*;
 @RestController
 public class HelloController {
 //    @Autowired
-//    private UserList userList;
+
     private Connection conn;
     private Statement stmt;
 
