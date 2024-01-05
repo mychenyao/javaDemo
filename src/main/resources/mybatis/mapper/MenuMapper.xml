@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.Menu">
+    <select id="getMenuDetail" resultType="com.example.demo.entity.MenuEntity">
+        select *
+        from sys_menu
+        where menu_id = #{id}
+    </select>
+    <update id="editMenuData" parameterType="com.example.demo.entity.MenuEntity">
+        update sys_menu set remark=#{remark} where menu_id=#{id}
+    </update>
+    <select id="getMenuList" resultType="com.example.demo.entity.MenuEntity">
+        select * from sys_menu
+    </select>
+</mapper>

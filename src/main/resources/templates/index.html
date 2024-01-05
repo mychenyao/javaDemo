@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Page</title>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="/style/index.css">
+</head>
+<body>
+<div id="app">
+    <div class="app_container">
+        <el-table
+                :data="dataList"
+                style="width: 100%">
+
+            <el-table-column
+                    prop="menuId"
+                    label="id"
+                    width="80"
+                    >
+            </el-table-column> <el-table-column
+                    prop="menuName"
+                    label="菜单名称"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="url"
+                    label="请求地址"
+                    width="180">
+            </el-table-column><el-table-column
+                    prop="visible"
+                    label="菜单状态"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="createBy"
+                    label="创建者">
+            </el-table-column><el-table-column
+                    prop="createTime"
+                    label="创建时间">
+            </el-table-column><el-table-column
+                    prop="remark"
+                    label="备注">
+            </el-table-column>
+            <el-table-column>
+                <template slot-scope="scope">
+                    <el-button @click="handleEdit(scope.row)">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
+    <el-dialog title="编辑" :visible.sync="dialogTableVisible">
+        <el-input :rows="5" type="textarea" placeholder="请输入备注" v-model="remark"></el-input>
+        <div slot="footer">
+            <el-button @click="submit">提交</el-button>
+        </div>
+    </el-dialog>
+
+</div>
+</body>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                remark: '',
+                id: '',
+                dataList: [],
+                dialogTableVisible: false
+            }
+        },
+        methods: {
+            handleEdit({menuId}) {
+                this.id = menuId
+                this.dialogTableVisible = true
+                this.getDetail()
+            },
+            getDetail() {
+                axios.get(`/getMenuDetail?id=${this.id}`).then(({data})=>{
+                    this.remark = data.result.remark
+                })
+            },
+            submit() {
+                axios.post('/editMenuData', {remark: this.remark, id: this.id}).then(({data})=>{
+                    if(data.code === 200) {
+                        this.getDataList()
+                        this.$message.success(data.msg)
+                        this.dialogTableVisible = false
+                    } else {
+                        this.$message.error(data.msg)
+                    }
+                })
+            },
+            getDataList() {
+                axios.get('/getMenuList').then(({data}) => {
+                    this.dataList = data.result
+                })
+            }
+        },
+        created() {
+           this.getDataList()
+        }
+    })
+</script>
+</html>
