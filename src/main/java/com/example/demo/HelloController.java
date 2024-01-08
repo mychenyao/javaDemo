@@ -15,9 +15,6 @@ import java.util.*;
 public class HelloController {
 //    @Autowired
 
-    private Connection conn;
-    private Statement stmt;
-
     @Autowired
     private UserMapper userMapper;
 
