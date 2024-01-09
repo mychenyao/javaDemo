@@ -4,13 +4,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.dao.Menu">
+<!--    <resultMap id="menuResMap" type="com.example.demo.entity.MenuEntity">-->
+<!--        <id property="menuId" column="menu_id"></id>-->
+<!--        <result column="menu_name" property="menuName"></result>-->
+<!--        <result column="remark" property="remark"></result>-->
+<!--    </resultMap>-->
     <select id="getMenuDetail" resultType="com.example.demo.entity.MenuEntity">
         select *
         from sys_menu
         where menu_id = #{id}
     </select>
     <update id="editMenuData" parameterType="com.example.demo.entity.MenuEntity">
-        update sys_menu set remark=#{remark} where menu_id=#{id}
+        update sys_menu
+        <set>
+            <if test="remark != null">
+                remark=#{remark}
+            </if>
+        </set>
+        where menu_id=#{id}
+    </update>
+    <update id="editMenuRemarkAll">
+        update sys_menu
+        <set>
+            <if test="remark!=null">
+                remark=#{remark}
+            </if>
+        </set>
+        where menu_id in
+        <foreach collection="idList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
     </update>
     <select id="getMenuList" resultType="com.example.demo.entity.MenuEntity">
         select * from sys_menu
@@ -24,4 +48,87 @@
     <select id="getMenuListTotal" resultType="Integer">
         select count(*) from sys_menu
     </select>
+    <insert id="addMenu" parameterType="com.example.demo.entity.MenuEntity">
+        insert into sys_menu (
+            <if test="menuId!=null">
+                menu_id,
+            </if>
+            <if test="menuName!=null">
+                menu_name,
+            </if>
+            <if test="parentId!=null">
+                parent_id,
+            </if>
+            <if test="orderNum!=null">
+                order_num,
+            </if>
+            <if test="url!=null">
+                url,
+            </if>
+            <if test="visible!=null">
+                visible,
+            </if>
+            <if test="createBy!=null">
+                create_by,
+            </if>
+           <if test="isRefresh!=null">
+                is_refresh,
+            </if>
+           <if test="icon!=null">
+               icon,
+            </if>
+           <if test="createTime!=null">
+               create_time,
+            </if>
+           <if test="updateBy!=null">
+               update_by,
+            </if>
+           <if test="updateTime!=null">
+               update_time,
+            </if>
+            <if test="remark!=null">
+                remark
+            </if>
+        )values(
+        <if test="menuId!=null">
+            #{menuId},
+        </if>
+        <if test="menuName!=null">
+            #{menuName},
+        </if>
+        <if test="parentId!=null">
+            #{parentId},
+        </if>
+        <if test="orderNum!=null">
+            #{orderNum},
+        </if>
+        <if test="url!=null">
+            #{url},
+        </if>
+        <if test="visible!=null">
+            #{visible},
+        </if>
+        <if test="createBy!=null">
+            #{createBy},
+        </if>
+        <if test="isRefresh!=null">
+            #{isRefresh},
+        </if>
+        <if test="icon!=null">
+            #{icon},
+        </if>
+        <if test="createTime!=null">
+            #{createTime},
+        </if>
+        <if test="updateBy!=null">
+            #{updateBy},
+        </if>
+        <if test="updateTime!=null">
+            #{updateTime},
+        </if>
+        <if test="remark!=null">
+            #{remark}
+        </if>
+        )
+    </insert>
 </mapper>

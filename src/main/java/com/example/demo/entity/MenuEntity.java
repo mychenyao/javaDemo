@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import lombok.Data;
+import org.springframework.stereotype.Controller;
 
 @Data
 public class MenuEntity {
@@ -24,7 +25,7 @@ public class MenuEntity {
   `remark` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '备注',
 
      */
-    private String menuId;
+    private Long menuId;
     private String menuName;
     private String menuType;
     private String remark;
@@ -34,5 +35,73 @@ public class MenuEntity {
     private String isRefresh;
     private String visible;
     private String updateBy;
+    private String parentId;
+    private String orderNum;
+    private String icon;
+    private String createBy;
+    private String updateTime;
 
+    public String getCreateBy() {
+        return createBy;
+    }
+
+    public String getUpdateBy() {
+        return updateBy;
+    }
+
+    public Long getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
+    }
+
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public String getMenuType() {
+        return menuType;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public String getIsRefresh() {
+        return isRefresh;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public String getVisible() {
+        return visible;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
 }

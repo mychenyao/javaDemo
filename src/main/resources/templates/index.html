@@ -18,8 +18,9 @@
                     prop="menuId"
                     label="id"
                     width="80"
-                    >
-            </el-table-column> <el-table-column
+            >
+            </el-table-column>
+            <el-table-column
                     prop="menuName"
                     label="菜单名称"
                     width="180">
@@ -28,7 +29,8 @@
                     prop="url"
                     label="请求地址"
                     width="180">
-            </el-table-column><el-table-column
+            </el-table-column>
+            <el-table-column
                     prop="visible"
                     label="菜单状态"
                     width="180">
@@ -36,10 +38,12 @@
             <el-table-column
                     prop="createBy"
                     label="创建者">
-            </el-table-column><el-table-column
+            </el-table-column>
+            <el-table-column
                     prop="createTime"
                     label="创建时间">
-            </el-table-column><el-table-column
+            </el-table-column>
+            <el-table-column
                     prop="remark"
                     label="备注">
             </el-table-column>
@@ -60,12 +64,70 @@
                     @current-change="handleCurrentChange"
             />
         </div>
-
+        <el-button @click="allEditRemark">批量修改备注</el-button>
+        <el-button @click="addData">新增</el-button>
     </div>
     <el-dialog title="编辑" :visible.sync="dialogTableVisible">
         <el-input :rows="5" type="textarea" placeholder="请输入备注" v-model="remark"></el-input>
         <div slot="footer">
             <el-button @click="submit">提交</el-button>
+        </div>
+    </el-dialog>
+    <el-dialog title="新增" :visible.sync="addDialogTableVisible">
+        <el-form :model="formData">
+            <el-row :gutter="24">
+                <el-col :span="12">
+                    <el-form-item label="菜单名称">
+                        <el-input v-model="formData.menuName"></el-input>
+                    </el-form-item>
+                </el-col><el-col :span="12">
+                <el-form-item label="url">
+                    <el-input v-model="formData.url"></el-input>
+                </el-form-item>
+                </el-col><el-col :span="12">
+                <el-form-item label="是否刷新（0刷新 1不刷新）">
+                    <el-input v-model="formData.isRefresh"></el-input>
+                </el-form-item>
+                </el-col><el-col :span="12">
+                <el-form-item label="创建者">
+                    <el-input v-model="formData.createBy"></el-input>
+                </el-form-item>
+                </el-col><el-col :span="12">
+                <el-form-item label="更新者">
+                    <el-input v-model="formData.updateBy"></el-input>
+                </el-form-item>
+                </el-col><el-col :span="12">
+                <el-form-item label="创建时间">
+                    <el-date-picker
+                            v-model="formData.createTime"
+                            type="datetime"
+                            placeholder="选择日期时间"
+                            align="right"
+                            value-format="yyyy-MM-dd HH:mm:ss"
+                            :picker-options="pickerOptions">
+                    </el-date-picker>
+                </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="更新时间">
+                        <el-date-picker
+                                v-model="formData.updateTime"
+                                type="datetime"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                placeholder="选择日期时间"
+                                align="right"
+                                :picker-options="pickerOptions">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-col><el-col :span="12">
+                <el-form-item label="备注">
+                    <el-input :rows="5" type="textarea" v-model="formData.remark"></el-input>
+                </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
+        <div slot="footer">
+            <el-button @click="submitAdd">提交</el-button>
         </div>
     </el-dialog>
 
@@ -80,6 +142,44 @@
         el: '#app',
         data() {
             return {
+                addDialogTableVisible: true,
+                pickerOptions: {
+                    shortcuts: [{
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    }, {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    }, {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }]
+                },
+                formData: {
+                    menuId: "",
+                    menuName: "",
+                    parentId: "0",
+                    orderNum: "0",
+                    url: "",
+                    visible: "0",
+                    isRefresh: "1",
+                    icon: "#",
+                    createBy: "",
+                    createTime: "",
+                    updateBy: "",
+                    updateTime: "",
+                    remark: ""
+                },
                 searchForm: {
                     pageNum: 1,
                     pageSize: 10
@@ -98,10 +198,19 @@
                 this.searchForm.pageNum = pageNum
                 this.getDataList()
             },
+            allEditRemark() {
+                this.id = this.dataList.slice(0, 3).map(v => v.menuId)
+                this.dialogTableVisible = true
+            },
             handleSizeChange(size) {
                 this.searchForm.pageSize = size
                 this.searchForm.pageNum = 1
                 this.getDataList()
+            },
+            submitAdd() {
+                axios.post('/addMenu', this.formData).then(({data})=> {
+                    console.log(data);
+                })
             },
             handleEdit({menuId}) {
                 this.id = menuId
@@ -109,13 +218,21 @@
                 this.getDetail()
             },
             getDetail() {
-                axios.get(`/getMenuDetail?id=${this.id}`).then(({data})=>{
+                axios.get(`/getMenuDetail?id=${this.id}`).then(({data}) => {
                     this.remark = data.result.remark
                 })
             },
+            addData() {
+
+            },
             submit() {
-                axios.post('/editMenuData', {remark: this.remark, id: this.id}).then(({data})=>{
-                    if(data.code === 200) {
+                const url = Array.isArray(this.id) ? '/editMenuRemarkAll' : '/editMenuData'
+                let params = {remark: this.remark, id: this.id}
+                if (Array.isArray(this.id)) {
+                    params = {remark: this.remark, idList: this.id}
+                }
+                axios.post(url, params).then(({data}) => {
+                    if (data.code === 200) {
                         this.getDataList()
                         this.$message.success(data.msg)
                         this.dialogTableVisible = false
@@ -132,7 +249,7 @@
             }
         },
         created() {
-           this.getDataList()
+            this.getDataList()
         }
     })
 </script>

@@ -42,6 +42,13 @@ public class HelloController {
         res.success(null);
         return res;
     }
+    @RequestMapping(value = "editMenuRemarkAll", method = RequestMethod.POST)
+    public Response<Object> editMenuRemarkAll(@RequestBody EditDataParams info) {
+        Response<Object> res = new Response<>();
+        menu.editMenuRemarkAll(info);
+        res.success(null);
+        return res;
+    }
 
     @RequestMapping(value = "/getMenuDetail", method = RequestMethod.GET)
     public Response<MenuEntity> getMenuDetail(String id) {
@@ -53,7 +60,7 @@ public class HelloController {
         res.success(menu.getMenuDetail(id));
         return res;
     }
-
+    //批量修改备注
     @RequestMapping(value = "/getMenuList", method = RequestMethod.GET)
     public Response<Map<String, Object>> getMenuList(@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "1") Integer pageNum) {
         PageInfo pageInfo = new PageInfo();
@@ -68,6 +75,19 @@ public class HelloController {
         return res;
     }
 
+    @RequestMapping(value = "/addMenu", method = RequestMethod.POST)
+    public Response<Object> addMenu(@RequestBody MenuEntity params) {
+        Response<Object> res = new Response<>();
+        Random random = new Random();
+        int minValue = 1000;
+        int maxValue = 100000;
+        long id = random.nextInt(maxValue - minValue + 1) + minValue;
+        params.setMenuId(id);
+        System.out.print(params.toString());
+        menu.addMenu(params);
+        res.success(null);
+        return res;
+    }
 
     @RequestMapping(value = "/getDataList", method = RequestMethod.GET)
     public Response<Map<String, Object>> getDataList() {
