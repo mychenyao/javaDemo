@@ -18,6 +18,5 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
         Date date = new Date();
         SimpleDateFormat currentDate = new SimpleDateFormat("YYYY-MM-DD HH:mm:ss");
-        System.out.print(currentDate.format(date));
     }
 }

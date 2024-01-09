@@ -9,3 +9,8 @@
     min-height: 100vh;
     background: #f0f0f0;
 }
+
+.text_right {
+    text-align: right;
+    margin-top: 24px;
+}

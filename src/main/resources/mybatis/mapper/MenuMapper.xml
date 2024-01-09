@@ -14,5 +14,14 @@
     </update>
     <select id="getMenuList" resultType="com.example.demo.entity.MenuEntity">
         select * from sys_menu
+        <if test="pageSize != null">
+            limit #{pageSize}
+        </if>
+        <if test="pageNum != null">
+            offset #{pageNum}
+        </if>
+    </select>
+    <select id="getMenuListTotal" resultType="Integer">
+        select count(*) from sys_menu
     </select>
 </mapper>
