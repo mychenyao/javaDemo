@@ -10,7 +10,7 @@ spring:
       max-request-size: 500MB
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ruoyi?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+    url: jdbc:mysql://127.0.0.1:3306/ruoyi?useSSL=false&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
     password: 12345678
     username: root
 

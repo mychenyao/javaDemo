@@ -5,8 +5,12 @@ import lombok.Data;
 @Data
 public class UserEntity {
     private Integer userId;
+    private Integer deptId;
     private String userName;
     private String userType;
-    private String password;
+    private String loginName;
+    private String email;
+    private String phonenumber;
+    private String sex;
     private String remark;
 }
