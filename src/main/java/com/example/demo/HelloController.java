@@ -1,6 +1,8 @@
 package com.example.demo;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo.bean.MyBean;
+import com.example.demo.bean.MyTestBean;
 import com.example.demo.controller.EditDataParams;
 import com.example.demo.controller.PageInfo;
 import com.example.demo.controller.Response;
@@ -10,6 +12,7 @@ import com.example.demo.entity.MenuEntity;
 import com.example.demo.entity.UserEntity;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.*;
@@ -21,6 +24,12 @@ public class HelloController {
 
     @Autowired
     private Menu menu;
+
+    public HelloController() {
+        var context = new AnnotationConfigApplicationContext(MyTestBean.class);
+        var myBean = context.getBean(MyBean.class);
+        var myBeans = context.getBean(MyBean.class);
+    }
 
     @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
     public Response<UserEntity> getUserInfo(String id) {

@@ -38,6 +38,7 @@
     </update>
     <select id="getMenuList" resultType="com.example.demo.entity.MenuEntity">
         select * from sys_menu
+        order by create_time desc
         <if test="pageSize != null">
             limit #{pageSize}
         </if>
@@ -131,4 +132,5 @@
         </if>
         )
     </insert>
+
 </mapper>

@@ -5,7 +5,7 @@
     <title>My Page</title>
     <!-- 引入样式 -->
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
-    <link rel="stylesheet" href="/style/index.css?t=1">
+    <link rel="stylesheet" href="/style/index.css?t=23231">
 </head>
 <body>
 <div id="app">
@@ -66,6 +66,15 @@
         </div>
         <el-button @click="allEditRemark">批量修改备注</el-button>
         <el-button @click="addData">新增</el-button>
+        <input @change="uploadFile" multiple type="file"/>
+        <div>
+            <div class="img_container">
+                <div class="img_item" :span="1" v-for="item in imgList" :key="item.id">
+                    <img class="img" :src="item.url" alt="">
+                    <el-buton @click="delImage(item.id)">删除</el-buton>
+                </div>
+            </div>
+        </div>
     </div>
     <el-dialog title="编辑" :visible.sync="dialogTableVisible">
         <el-input :rows="5" type="textarea" placeholder="请输入备注" v-model="remark"></el-input>
@@ -142,7 +151,8 @@
         el: '#app',
         data() {
             return {
-                addDialogTableVisible: true,
+                imgList: [],
+                addDialogTableVisible: false,
                 pickerOptions: {
                     shortcuts: [{
                         text: '今天',
@@ -198,6 +208,18 @@
                 this.searchForm.pageNum = pageNum
                 this.getDataList()
             },
+            uploadFile({target}) {
+                const files = [...target.files]
+                files.forEach(v => {
+                    const form = new FormData()
+                    form.append('file', v)
+                    axios.post('/uploadFile', form).then(res=>{
+                        this.getFileList()
+                    })
+                })
+
+
+            },
             allEditRemark() {
                 this.id = this.dataList.slice(0, 3).map(v => v.menuId)
                 this.dialogTableVisible = true
@@ -222,8 +244,13 @@
                     this.remark = data.result.remark
                 })
             },
+            delImage(id) {
+                axios.post(`/delImage`, {id}).then(({data}) => {
+                    this.getFileList()
+                })
+            },
             addData() {
-
+                this.addDialogTableVisible = true
             },
             submit() {
                 const url = Array.isArray(this.id) ? '/editMenuRemarkAll' : '/editMenuData'
@@ -246,10 +273,16 @@
                     this.dataList = data.result.list
                     this.pageInfo = data.result.pageInfo
                 })
+            },
+            getFileList() {
+                axios.get('/getFileList').then(({data}) => {
+                    this.imgList = data.result
+                })
             }
         },
         created() {
             this.getDataList()
+            this.getFileList()
         }
     })
 </script>

@@ -4,6 +4,20 @@
     width: 80vw;
     background: #fff;
 }
+.img_container {
+    display: flex;
+    margin-top: 24px;
+}
+.img_item {
+    margin-right: 14px;
+    width: 160px;
+    height: 180px;
+}
+.img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
 #app {
     width: 100%;
     min-height: 100vh;
