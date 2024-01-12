@@ -82,7 +82,7 @@ public class DeptEntity {
          */
         private Date updateTime;
 
-        private List<UserEntity> userList;
+        private UserEntity userInfo;
 
     /*
     * CREATE TABLE `sys_dept` (

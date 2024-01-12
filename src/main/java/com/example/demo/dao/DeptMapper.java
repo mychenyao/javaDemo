@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface DeptMapper {
     List<DeptEntity> getDeptAndUserListAll();
-    List<UserEntity> getUserList(Integer id);
 }

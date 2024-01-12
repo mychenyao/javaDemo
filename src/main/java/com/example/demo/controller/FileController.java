@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.example.demo.dao.FileMapper;
 import com.example.demo.entity.FileEntity;
+import com.example.demo.utils.FileFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -43,10 +44,19 @@ public class FileController {
         fileMapper.saveImage(resData);
         return res;
     }
+
+    /**
+     * 获取文件列表
+     * @return Response
+     */
     @RequestMapping(value = "/getFileList", method = RequestMethod.GET)
     public Response<?> getFileList() {
         var res = new Response<>();
         res.setResult(fileMapper.getImagesList());
+        /*
+        isDirectory 判断是否为目录
+        exists 判断文件是否存在
+         */
         return res;
     }
     @RequestMapping(value = "/delImage", method = RequestMethod.POST)
